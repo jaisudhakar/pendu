@@ -1,0 +1,79 @@
+name: Desktop builds
+
+# Builds Pendu for Ubuntu/Linux (.deb, AppImage), Windows (x64, ARM64) and macOS (Apple Silicon, Intel).
+# Push a tag like v1.0.0 to also publish a GitHub Release, which the website's download buttons point to.
+on:
+  push:
+    tags: ['v*']
+  pull_request:
+    paths:
+      - 'desktop/**'
+      - 'assets/js/rope.js'
+      - 'assets/js/charms.js'
+      - '.github/workflows/desktop.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build (${{ matrix.name }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux
+            os: ubuntu-latest
+            script: dist:linux
+          - name: Windows
+            os: windows-latest
+            script: dist:win
+          - name: macOS
+            os: macos-latest
+            script: dist:mac
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+
+      - run: npm ci
+
+      - name: Package
+        run: npm run ${{ matrix.script }}
+        env:
+          # Builds are unsigned for now; see README for signing.
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pendu-${{ matrix.name }}
+          if-no-files-found: error
+          path: |
+            desktop/dist/Pendu-*.deb
+            desktop/dist/Pendu-*.AppImage
+            desktop/dist/Pendu-*.exe
+            desktop/dist/Pendu-*.dmg
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/Pendu-*
+          generate_release_notes: true

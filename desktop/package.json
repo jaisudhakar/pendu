@@ -1,0 +1,99 @@
+{
+  "name": "pendu",
+  "productName": "Pendu",
+  "version": "1.0.0",
+  "description": "A little charm that swings on your desktop.",
+  "homepage": "https://github.com/jaisudhakar/pendu",
+  "author": {
+    "name": "jaisudhakar",
+    "email": "jaisudhakar@users.noreply.github.com"
+  },
+  "license": "MIT",
+  "main": "main.js",
+  "scripts": {
+    "sync": "node scripts/sync-shared.js",
+    "prestart": "npm run sync",
+    "start": "electron .",
+    "predist": "npm run sync",
+    "dist": "electron-builder",
+    "predist:linux": "npm run sync",
+    "dist:linux": "electron-builder --linux",
+    "predist:win": "npm run sync",
+    "dist:win": "electron-builder --win --x64 && electron-builder --win --arm64",
+    "predist:mac": "npm run sync",
+    "dist:mac": "electron-builder --mac --arm64 --x64"
+  },
+  "devDependencies": {
+    "electron": "^44.4.5",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "io.github.jaisudhakar.pendu",
+    "productName": "Pendu",
+    "copyright": "© 2026 Pendu",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "package.json",
+      "renderer/**/*",
+      "build/tray*.png"
+    ],
+    "icon": "build/icon.png",
+    "publish": null,
+    "mac": {
+      "category": "public.app-category.entertainment",
+      "target": [
+        "dmg"
+      ],
+      "artifactName": "Pendu-mac-${arch}.${ext}",
+      "extendInfo": {
+        "LSUIElement": true
+      },
+      "identity": null
+    },
+    "dmg": {
+      "title": "Pendu"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "artifactName": "Pendu-win-${arch}-Setup.${ext}"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "shortcutName": "Pendu"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Utility",
+      "synopsis": "A little charm that swings on your desktop",
+      "maintainer": "jaisudhakar <jaisudhakar@users.noreply.github.com>",
+      "executableName": "pendu"
+    },
+    "deb": {
+      "artifactName": "Pendu-linux-amd64.deb"
+    },
+    "appImage": {
+      "artifactName": "Pendu-linux-x86_64.AppImage"
+    }
+  }
+}
