@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Pendu · Charms That Swing On Your Desktop</title>
+  <meta name="description" content="Pendu hangs a little charm from the top of your screen on a real, simulated rope. Push it, flick it, watch it swing. Free for Ubuntu, Windows and macOS.">
+  <meta name="theme-color" content="#f5efe6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#15110e" media="(prefers-color-scheme: dark)">
+  <meta property="og:title" content="Pendu · Charms That Swing On Your Desktop">
+  <meta property="og:description" content="A little charm on a real rope, hanging from the top of your screen. Free for Ubuntu, Windows and macOS.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script>
+    // Apply the saved theme before first paint to avoid a flash.
+    try { const t = localStorage.getItem('pendu:theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ================= NAV ================= -->
+  <header class="nav" id="nav">
+    <a class="logo" href="#top" aria-label="Pendu home">
+      <span class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><path d="M16 1v11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="14" r="2.4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 17c-6 0-9 4-9 8.5S11 31 16 31s9-1 9-5.5-3-8.5-9-8.5z" fill="var(--accent)"/></svg>
+      </span>
+      Pendu
+    </a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#charms">Charms</a>
+      <a href="#features">Features</a>
+      <a href="#play">Play</a>
+      <a href="#download">Download</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" id="themeBtn" aria-label="Toggle dark mode">
+        <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g></svg>
+        <svg class="moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z" fill="currentColor"/></svg>
+      </button>
+      <a class="btn btn-sm btn-ink" href="#download">Download</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- ================= HERO ================= -->
+    <section class="hero" id="top">
+      <div class="hero-rail" aria-hidden="true"></div>
+      <canvas class="hero-canvas" id="heroCanvas" aria-label="A charm hanging on a rope. Drag or flick it."></canvas>
+      <div class="hero-copy">
+        <p class="eyebrow reveal-up" style="--d:0">
+          <span class="dot"></span> Free for Ubuntu, Windows &amp; macOS
+        </p>
+        <h1 class="reveal-up" style="--d:1">A little charm that <em>swings</em> on your desktop.</h1>
+        <p class="lede reveal-up" style="--d:2">
+          Pendu hangs a charm from the top of your screen on a real, simulated rope.
+          Push it, flick it, and watch it swing and settle like the real thing.
+          The rest of the time it stays out of your way.
+        </p>
+        <div class="hero-cta reveal-up" style="--d:3">
+          <a class="btn btn-accent" id="heroDownload" href="#download">
+            <span class="os-glyph" data-os-glyph></span>
+            <span>Download for <b data-os-name>your computer</b></span>
+          </a>
+          <a class="btn btn-ghost" href="#charms">Try it in your browser <span aria-hidden="true">↓</span></a>
+        </div>
+        <p class="hero-meta reveal-up" style="--d:4">v1.0 · Free &amp; open source · No account, no tracking</p>
+      </div>
+      <div class="hero-hint" id="heroHint" aria-hidden="true">
+        <svg viewBox="0 0 120 60"><path d="M6 44C30 54 70 50 96 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 5"/><path d="M86 20l11 1-2 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>give it a push</span>
+      </div>
+      <button class="hero-shuffle" id="heroShuffle" aria-label="Hang a different charm">
+        <svg viewBox="0 0 24 24"><path d="M4 7h3.5c3 0 4.5 2 6 5s3 5 6 5H20M4 17h3.5c1.4 0 2.5-.5 3.3-1.2M16.5 4 20 7l-3.5 3M16.5 14 20 17l-3.5 3M13.2 8.2c.8-.7 1.9-1.2 3.3-1.2H20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Another charm</span>
+      </button>
+      <a class="scroll-cue" href="#charms" aria-label="Scroll down"><span></span></a>
+    </section>
+
+    <!-- ================= MARQUEE ================= -->
+    <section class="marquee" aria-label="Charm collection preview">
+      <div class="marquee-track" id="marquee"></div>
+    </section>
+
+    <!-- ================= LIBRARY / PLAYGROUND ================= -->
+    <section class="section" id="charms">
+      <div class="section-head reveal">
+        <p class="kicker">The Library</p>
+        <h2>Thirty-two charms. <em>Nine ropes.</em> Your cord.</h2>
+        <p>Pick up to three charms, choose what they hang from, and play with it right here. It's the same physics as the desktop app.</p>
+      </div>
+
+      <div class="lab reveal">
+        <aside class="lab-panel">
+          <div class="tabs" role="tablist">
+            <button class="tab on" role="tab" data-tab="library" aria-selected="true">Library</button>
+            <button class="tab" role="tab" data-tab="ropes" aria-selected="false">Ropes</button>
+            <button class="tab" role="tab" data-tab="create" aria-selected="false">Create</button>
+          </div>
+
+          <div class="tab-body" data-body="library">
+            <div class="lib-tools">
+              <label class="search">
+                <svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                <input id="libSearch" type="search" placeholder="Search charms" autocomplete="off">
+              </label>
+            </div>
+            <div class="chips" id="libCollections"></div>
+            <p class="col-blurb" id="colBlurb"></p>
+            <div class="charm-grid" id="libGrid"></div>
+          </div>
+
+          <div class="tab-body" data-body="ropes" hidden>
+            <div class="rope-grid" id="ropeGrid"></div>
+            <label class="slider">
+              <span>Rope length <output id="lenOut"></output></span>
+              <input type="range" id="lenRange" min="120" max="360" step="10">
+            </label>
+            <label class="slider">
+              <span>Charm size <output id="sizeOut"></output></span>
+              <input type="range" id="sizeRange" min="70" max="140" step="5">
+            </label>
+          </div>
+
+          <div class="tab-body" data-body="create" hidden>
+            <label class="dropzone" id="dropzone">
+              <input type="file" id="fileInput" accept="image/png,image/jpeg,image/svg+xml,image/webp">
+              <svg viewBox="0 0 48 48"><path d="M24 32V12M16 19l8-8 8 8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 30v6a4 4 0 0 0 4 4h24a4 4 0 0 0 4-4v-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+              <strong>Drop an image here</strong>
+              <span>PNG, JPG, SVG or WebP. It stays on your device.</span>
+            </label>
+            <div class="frame-pick">
+              <span>Frame</span>
+              <div class="seg" id="frameSeg">
+                <button class="on" data-frame="round">Round locket</button>
+                <button data-frame="free">Cut-out</button>
+              </div>
+            </div>
+            <p class="small muted">Your charms show up in the <b>Mine</b> collection and hang with the same physics as the built-in ones.</p>
+          </div>
+        </aside>
+
+        <div class="lab-stage">
+          <div class="stage-rail" aria-hidden="true"></div>
+          <canvas id="labCanvas" aria-label="Your cord. Drag or flick the charms."></canvas>
+          <div class="cord-list" id="cordList" aria-label="On your cord"></div>
+          <div class="stage-actions">
+            <button class="btn btn-sm btn-ghost" id="nudgeBtn">Nudge</button>
+            <button class="btn btn-sm btn-ghost" id="clearBtn">Clear</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FEATURES ================= -->
+    <section class="section" id="features">
+      <div class="section-head reveal">
+        <p class="kicker">Made to feel real</p>
+        <h2>Physics first. <em>Pixels second.</em></h2>
+      </div>
+      <div class="features">
+        <article class="feature big reveal tilt">
+          <div class="feature-text">
+            <h3>Nine ropes, nine feels</h3>
+            <p>Each rope is its own set of solver values, not just a different picture. A thread floats and flutters, leather keeps its curve, and a gold chain hangs heavy and settles slowly.</p>
+          </div>
+          <div class="rope-compare">
+            <figure><canvas data-compare="thread"></canvas><figcaption>Thread</figcaption></figure>
+            <figure><canvas data-compare="leather"></canvas><figcaption>Leather</figcaption></figure>
+            <figure><canvas data-compare="gold"></canvas><figcaption>Gold chain</figcaption></figure>
+          </div>
+        </article>
+        <article class="feature reveal tilt" style="--d:1">
+          <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M12 2v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 8c-1 3 2 4 1 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 2.5"/><circle cx="13" cy="18.5" r="3.5" fill="currentColor"/></svg></div>
+          <h3>A real rope, simulated</h3>
+          <p>A Verlet solver runs at a fixed 240 Hz with twenty segments. It's independent of your screen's refresh rate, and the rope never stretches past 1.02× its length.</p>
+        </article>
+        <article class="feature reveal tilt" style="--d:2">
+          <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M12 1v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7.5" r="2.6" fill="currentColor"/><rect x="9.5" y="11" width="5" height="5" rx="1.2" fill="currentColor" opacity=".75"/><path d="M12 17.5l3 3-3 3-3-3z" fill="currentColor" opacity=".5"/></svg></div>
+          <h3>Up to three charms</h3>
+          <p>Stack up to three charms on one cord in any order. Each has its own size and weight, so the stack swings like one.</p>
+        </article>
+        <article class="feature reveal tilt" style="--d:3">
+          <div class="f-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="10" r="2" fill="currentColor"/><path d="M4 18l5-5 4 4 3-3 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
+          <h3>Make your own</h3>
+          <p>Drop in a PNG, JPG or SVG and it becomes a charm with the same hanging physics as the built-in ones.</p>
+        </article>
+        <article class="feature reveal tilt" style="--d:1">
+          <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M5 3l6 16 2.5-6.5L20 10z" fill="currentColor"/></svg></div>
+          <h3>Out of your way</h3>
+          <p>The overlay is click-through everywhere except the charm itself, so you can keep working right under it.</p>
+        </article>
+        <article class="feature reveal tilt" style="--d:2">
+          <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z" fill="currentColor"/><path d="M15 3h4l-4 4h4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>Featherweight</h3>
+          <p>When the charm settles, the solver goes to sleep and stops using the CPU until you touch it again.</p>
+        </article>
+        <article class="feature reveal tilt" style="--d:3">
+          <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.4 9-8 11-4.6-2-8-6-8-11V5z" fill="currentColor"/><path d="M8.5 12l2.5 2.5 4.5-5" fill="none" stroke="var(--card)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>Private by design</h3>
+          <p>No account, no analytics, no network calls. Your charms and settings stay on your machine.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= GAME ================= -->
+    <section class="section" id="play">
+      <div class="section-head reveal">
+        <p class="kicker">Play</p>
+        <h2>Bubble <em>Swing</em></h2>
+        <p>Flick your cord into the bubbles. Carrying the charm into one doesn't count, so let it fly. Gold bubbles score big, and thorny ones cost you time. Your cord from the Library above comes along.</p>
+      </div>
+      <div class="game reveal" id="game">
+        <div class="game-hud">
+          <div><small>Score</small><b id="gScore">0</b></div>
+          <div><small>Combo</small><b id="gCombo">×1</b></div>
+          <div class="g-time"><small>Time</small><b id="gTime">45</b><i id="gTimeBar"></i></div>
+          <div><small>Best</small><b id="gBest">0</b></div>
+        </div>
+        <div class="game-stage">
+          <div class="stage-rail" aria-hidden="true"></div>
+          <canvas id="gameCanvas" aria-label="Bubble Swing game"></canvas>
+          <div class="game-overlay" id="gameOverlay">
+            <div class="go-card">
+              <h3 id="goTitle">Ready?</h3>
+              <p id="goText">45 seconds. Grab the charm, swing it, let go, and pop.</p>
+              <button class="btn btn-accent" id="goBtn">Start game</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= DOWNLOAD ================= -->
+    <section class="section" id="download">
+      <div class="section-head reveal">
+        <p class="kicker">Download</p>
+        <h2>Hang it on <em>any</em> desktop.</h2>
+        <p>Pendu is free on every platform. It lives in the system tray or menu bar, starts quietly, and only runs one copy at a time.</p>
+      </div>
+
+      <div class="downloads">
+        <article class="dl reveal" data-os="linux" style="--d:0">
+          <div class="dl-badge">Recommended for you</div>
+          <div class="dl-logo ubuntu">
+            <svg viewBox="0 0 64 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="6.5"><path d="M40.0 17.0A17 17 0 0 1 49.0 32.6"/><path d="M41.0 46.4A17 17 0 0 1 23.0 46.4"/><path d="M15.0 32.6A17 17 0 0 1 24.0 17.0"/></g><g fill="currentColor"><circle cx="32.0" cy="9.0" r="6.2"/><circle cx="51.9" cy="43.5" r="6.2"/><circle cx="12.1" cy="43.5" r="6.2"/></g></svg>
+          </div>
+          <h3>Ubuntu &amp; Linux</h3>
+          <p class="dl-sub">Ubuntu 20.04+, Debian, Fedora. Works on GNOME and KDE.</p>
+          <div class="dl-buttons">
+            <a class="btn btn-ink" data-file="Pendu-linux-amd64.deb">.deb installer <small>x64</small></a>
+            <a class="btn btn-ghost" data-file="Pendu-linux-x86_64.AppImage">AppImage <small>x64</small></a>
+          </div>
+          <pre class="dl-code"><code>sudo apt install ./Pendu-linux-amd64.deb</code><button class="copy" aria-label="Copy command">Copy</button></pre>
+        </article>
+
+        <article class="dl reveal" data-os="windows" style="--d:1">
+          <div class="dl-badge">Recommended for you</div>
+          <div class="dl-logo windows">
+            <svg viewBox="0 0 64 64" aria-hidden="true"><g fill="currentColor"><rect x="8" y="8" width="23" height="23" rx="2"/><rect x="33" y="8" width="23" height="23" rx="2"/><rect x="8" y="33" width="23" height="23" rx="2"/><rect x="33" y="33" width="23" height="23" rx="2"/></g></svg>
+          </div>
+          <h3>Windows</h3>
+          <p class="dl-sub">Windows 10 and 11. Installs for the current user, no admin needed.</p>
+          <div class="dl-buttons">
+            <a class="btn btn-ink" data-file="Pendu-win-x64-Setup.exe">Installer <small>x64</small></a>
+            <a class="btn btn-ghost" data-file="Pendu-win-arm64-Setup.exe">Installer <small>ARM64</small></a>
+          </div>
+          <p class="dl-note">SmartScreen may warn on first run. Click <b>More info → Run anyway</b>.</p>
+        </article>
+
+        <article class="dl reveal" data-os="mac" style="--d:2">
+          <div class="dl-badge">Recommended for you</div>
+          <div class="dl-logo mac">
+            <svg viewBox="0 0 64 64" aria-hidden="true"><path fill="currentColor" d="M43.6 34.2c0-5.4 4.4-8 4.6-8.1-2.5-3.7-6.4-4.2-7.8-4.2-3.3-.3-6.5 2-8.2 2-1.7 0-4.3-1.9-7.1-1.9-3.6.1-7 2.2-8.9 5.4-3.8 6.6-1 16.4 2.7 21.8 1.8 2.6 4 5.6 6.8 5.5 2.7-.1 3.8-1.8 7.1-1.8s4.2 1.8 7.1 1.7c2.9 0 4.8-2.7 6.6-5.3 2.1-3 2.9-6 3-6.1-.1-.1-5.8-2.3-5.9-9z"/><path fill="currentColor" d="M38.3 18.3c1.5-1.8 2.5-4.3 2.2-6.8-2.2.1-4.8 1.4-6.3 3.2-1.4 1.6-2.6 4.2-2.3 6.6 2.4.2 4.9-1.2 6.4-3z"/></svg>
+          </div>
+          <h3>macOS</h3>
+          <p class="dl-sub">macOS 11 Big Sur or later. Lives in the menu bar.</p>
+          <div class="dl-buttons">
+            <a class="btn btn-ink" data-file="Pendu-mac-arm64.dmg">Apple Silicon <small>M1–M4</small></a>
+            <a class="btn btn-ghost" data-file="Pendu-mac-x64.dmg">Intel</a>
+          </div>
+          <p class="dl-note">First launch: right-click the app, choose <b>Open</b>, then <b>Open</b> again.</p>
+        </article>
+      </div>
+      <p class="dl-foot reveal">All builds on <a id="releasesLink" href="#">GitHub Releases</a> · Build it yourself: <code>cd desktop &amp;&amp; npm install &amp;&amp; npm run dist</code></p>
+    </section>
+
+    <!-- ================= FAQ ================= -->
+    <section class="section narrow" id="faq">
+      <div class="section-head reveal">
+        <p class="kicker">Questions</p>
+        <h2>Good to <em>know</em></h2>
+      </div>
+      <div class="faq">
+        <details class="reveal"><summary>Is Pendu really free?</summary><p>Yes. It's free on Ubuntu, Windows and macOS, and the source code is open. There's no paid tier and no ads.</p></details>
+        <details class="reveal"><summary>Will it slow my computer down?</summary><p>No. The physics only runs while the charm moves. Once it settles, the solver sleeps and the app does almost nothing until you touch it again.</p></details>
+        <details class="reveal"><summary>Where does the charm hang?</summary><p>From the top edge of your screen, just under the menu bar or top panel. You can move the anchor left or right, change the rope length, and pick the charm size in the app.</p></details>
+        <details class="reveal"><summary>Can I click things under the charm?</summary><p>Yes. The overlay lets clicks pass through everywhere except the charm itself.</p></details>
+        <details class="reveal"><summary>Can I use my own images?</summary><p>Yes. Open <b>Create</b> and drop a PNG, JPG, SVG or WebP. It becomes a charm with a jump ring, and you can hang it like any other.</p></details>
+        <details class="reveal"><summary>Does it collect any data?</summary><p>No. Pendu makes no network requests. Settings are saved in a small file in your user folder.</p></details>
+        <details class="reveal"><summary>How do I quit or open settings?</summary><p>Use the Pendu icon in the system tray (Windows and Ubuntu) or the menu bar (macOS). It has Library, Nudge, Pause, Start at login and Quit.</p></details>
+        <details class="reveal"><summary>Why "Pendu"?</summary><p>It's French for "hanging". That's all it does, and it tries to do it beautifully.</p></details>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <a class="logo" href="#top">
+          <span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 1v11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="14" r="2.4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 17c-6 0-9 4-9 8.5S11 31 16 31s9-1 9-5.5-3-8.5-9-8.5z" fill="var(--accent)"/></svg></span>
+          Pendu
+        </a>
+        <p class="muted small">Small things we use every day can still make us feel something.</p>
+      </div>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="#charms">Library</a>
+        <a href="#play">Bubble Swing</a>
+        <a href="#download">Download</a>
+        <a id="sourceLink" href="#">Source code</a>
+      </nav>
+    </div>
+    <p class="footer-base muted small">© <span id="year">2026</span> Pendu. Made with HTML, CSS &amp; JavaScript.</p>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="assets/js/charms.js"></script>
+  <script src="assets/js/rope.js"></script>
+  <script src="assets/js/site.js"></script>
+  <script src="assets/js/game.js"></script>
+</body>
+</html>
