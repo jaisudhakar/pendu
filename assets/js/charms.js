@@ -11,8 +11,9 @@
   const svg = (defs, body) =>
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs>${defs.map((d) => G[d] || d).join('')}</defs>${body}</svg>`;
   // Jump ring + bail connecting the ring to the charm body at y = to.
+  // (The bail is a rect, not a line: a gradient on a zero-width line's bounding box renders nothing.)
   const ring = (to = 16, metal = 'gold') =>
-    `<path d="M50 11V${to}" stroke="url(#${metal})" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="7" r="4.6" fill="none" stroke="url(#${metal})" stroke-width="2.6"/>`;
+    `<rect x="48.5" y="10" width="3" height="${to - 9}" rx="1.5" fill="url(#${metal})"/><circle cx="50" cy="7" r="4.6" fill="none" stroke="url(#${metal})" stroke-width="2.6"/>`;
   const star = (cx, cy, R, r, fill, extra = '') => {
     let d = '';
     for (let i = 0; i < 10; i++) {
@@ -43,8 +44,8 @@
         <path d="M24 56h52v12c0 14-12 26-26 28-14-2-26-14-26-28z"/></g>
        <path d="M36 70q14-12 28 0q-14 12-28 0z" fill="#fff"/><circle cx="50" cy="70" r="5.2" fill="#2f6fe4"/><circle cx="50" cy="70" r="2.3" fill="#0b1026"/>`) },
     { id: 'crescent', name: 'Crescent', col: 'protection', size: 80, mass: 4, svg: svg(['silver'],
-      `${ring(20, 'silver')}<path d="M60 22A34 34 0 1 0 60 92A27 27 0 1 1 60 22Z" fill="url(#silver)" stroke="#6d7580" stroke-width="1.2"/>
-       ${star(70, 50, 8, 3.4, '#ffd966', 'stroke="#b8860b" stroke-width=".8"')}${star(78, 72, 4.5, 1.9, '#ffd966')}`) },
+      `${ring(25, 'silver')}<path d="M47.9 23A35 35 0 1 0 77.6 75A30 30 0 1 1 47.9 23Z" fill="url(#silver)" stroke="#6d7580" stroke-width="1.2"/>
+       ${star(68, 47, 8, 3.4, '#ffd966', 'stroke="#b8860b" stroke-width=".8"')}${star(79, 63, 4.5, 1.9, '#ffd966')}`) },
     { id: 'key', name: 'Old Key', col: 'protection', size: 96, mass: 6, svg: svg(['gold'],
       `${ring(14)}<path fill-rule="evenodd" d="M50 14a15 15 0 1 1 0 30a15 15 0 1 1 0-30zm0 7a8 8 0 1 0 0 16a8 8 0 1 0 0-16z" fill="url(#gold)" stroke="#8a5a10" stroke-width="1"/>
        <rect x="45.5" y="42" width="9" height="52" rx="3" fill="url(#gold)" stroke="#8a5a10" stroke-width="1"/>

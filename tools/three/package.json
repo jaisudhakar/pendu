@@ -1,0 +1,12 @@
+{
+  "name": "pendu-three-bundle",
+  "private": true,
+  "description": "Builds assets/vendor/three.min.js for the website's 3D charms.",
+  "scripts": {
+    "build": "esbuild entry.js --bundle --minify --format=iife --global-name=THREE --target=es2019 \"--banner:js=/* three.js r170 (subset) | MIT License | Copyright 2010-2024 three.js authors | https://threejs.org\\n   Built from tools/three. */\" --outfile=../../assets/vendor/three.min.js"
+  },
+  "devDependencies": {
+    "esbuild": "0.24.0",
+    "three": "0.170.0"
+  }
+}

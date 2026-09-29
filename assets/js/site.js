@@ -161,12 +161,23 @@
       return false;
     },
   });
+  const P3D = window.Pendu3D;
+  if (P3D) P3D.enhance(heroStage, { idle: !reduceMotion });
   setTimeout(() => { if (!hintDone) hint.classList.add('show'); }, 1800);
   hero.addEventListener('pointermove', (e) => {
     if (hintDone || e.pointerType !== 'mouse') return;
     const r = heroCanvas.getBoundingClientRect();
     if (heroCord.nearest(e.clientX - r.left, e.clientY - r.top, 0)) { hintDone = true; hint.classList.add('gone'); }
   });
+  // A little depth: the copy and the glow drift apart as the pointer moves.
+  if (!reduceMotion && matchMedia('(hover: hover)').matches) {
+    hero.addEventListener('pointermove', (e) => {
+      const r = hero.getBoundingClientRect();
+      hero.style.setProperty('--px', ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
+      hero.style.setProperty('--py', ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
+    });
+    hero.addEventListener('pointerleave', () => { hero.style.setProperty('--px', 0); hero.style.setProperty('--py', 0); });
+  }
   $('#heroShuffle').addEventListener('click', () => {
     heroSet = (heroSet + 1) % HERO_SETS.length;
     hangHero(reduceMotion ? 0 : (Math.random() > 0.5 ? 55 : -55));
@@ -212,6 +223,7 @@
     cord: labCord,
     anchor: (w, h) => labLayout(w, h),
   });
+  if (P3D) P3D.enhance(labStage, { idle: !reduceMotion });
   function relabel(swing) {
     hangLab(swing);
     labStage.redraw();
@@ -360,7 +372,7 @@
     c.lineCap = 'round';
     c.lineJoin = 'round';
     const pts = Array.from({ length: 13 }, (_, i) => { const t = i / 12; return { x: 6 + t * 48, y: 10 + Math.sin(t * Math.PI) * 22 }; });
-    drawRope(c, rope, pts);
+    if (!(P3D && P3D.ropeSwatch(c, rope, pts, w, h))) drawRope(c, rope, pts);
   }
   function renderRopes() {
     ropeGrid.innerHTML = ROPES.map((r) => `<button class="rope-tile ${lab.rope === r.id ? 'on' : ''}" data-rope="${r.id}"><canvas></canvas>${r.name}</button>`).join('');
@@ -422,6 +434,7 @@
     const cord = new Cord();
     cord.configure({ anchor: { x: 60, y: 14 }, length: 120, rope: canvas.dataset.compare, charms: [{ charm: byId.coin }], scale: 0.8 });
     const stage = new Stage(canvas, { cord, anchor: (w) => ({ x: w / 2, y: 14 }) });
+    if (P3D) P3D.enhance(stage);
     return { cord, stage };
   });
   let compareT = 0;

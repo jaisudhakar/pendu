@@ -13,6 +13,7 @@ This repository contains two things built from the same HTML, CSS and JavaScript
 
 ## Features
 
+- **Realistic 3D on the website.** Every cord is drawn with WebGL: gold and silver chains are real interlocking links, pearls have a nacre sheen, cotton cord has twisted strands, and each charm is a thick, bevelled piece that turns slowly on its ring and casts a soft shadow on the page. The metal gets its look from a small virtual photo studio it reflects.
 - **Real rope physics.** A Verlet solver runs at a fixed 240 Hz, independent of screen refresh. The rope never stretches past 1.02× its length. It sleeps when the charm settles, so it uses no CPU at rest.
 - **32 hand-drawn charms** in four collections (Protection, Luck, Ritual, Story), all inline SVG.
 - **Up to three charms on one cord**, in any order (drag to reorder).
@@ -28,6 +29,20 @@ There is no build step. Open `index.html` directly, or serve the folder:
 ```bash
 python3 -m http.server 8000
 # then open http://localhost:8000
+```
+
+### 3D rendering
+
+`assets/js/charms3d.js` draws the cord in 3D with [three.js](https://threejs.org). The physics and input still live in `rope.js`, so nothing about how the charm moves changes. One shared, offscreen WebGL renderer draws only the region around each cord and copies it into that section's canvas. The hero, the playground, the rope comparison, the rope swatches and Bubble Swing all use it.
+
+- Charms are built from their flat drawings at runtime: the silhouette becomes a solid with thickness, the edges get a rounded bevel (a normal map), and golds, rose golds and greys become polished metal while the other colours become glossy enamel.
+- A charm twists on its ring when you flick it. In the hero and the playground it also turns gently at rest, but only while it's on screen. `prefers-reduced-motion` turns that off.
+- If WebGL isn't available, or the GPU drops the context, the site falls back to the original Canvas 2D drawing.
+
+three.js is vendored as `assets/vendor/three.min.js`, a minified subset (about 120 KB gzipped) that sets `window.THREE`. It needs no CDN and works from `file://`. To rebuild it (for example after using another three.js class in `charms3d.js`), edit the export list in `tools/three/entry.js` and run:
+
+```bash
+cd tools/three && npm install && npm run build
 ```
 
 To publish on **GitHub Pages**, go to *Settings → Pages → Source* and choose **GitHub Actions**. The `Website` workflow (`.github/workflows/pages.yml`) then deploys `index.html` and `assets/` on every push to `main`.
@@ -88,8 +103,11 @@ index.html                 website
 assets/css/site.css        website styles (light/dark, animations)
 assets/js/rope.js          Verlet rope engine + canvas renderer + Stage (shared with the app)
 assets/js/charms.js        charm library as inline SVG + custom-charm maker (shared with the app)
+assets/js/charms3d.js      WebGL renderer for cords and charms (website only)
+assets/vendor/three.min.js three.js subset, built from tools/three
 assets/js/site.js          hero, library playground, rope comparison, downloads
 assets/js/game.js          Bubble Swing
+tools/three/               how assets/vendor/three.min.js is built
 desktop/main.js            Electron main process: overlay, click-through, tray, settings, autostart
 desktop/preload.js         the small bridge between main and renderer
 desktop/renderer/          overlay page and Library window

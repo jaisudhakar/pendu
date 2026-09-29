@@ -141,6 +141,32 @@
     return true;
   }
 
+  // A soap bubble: clear in the middle, a thin rim of shifting thin-film colours, two window glints.
+  function soapBubble(c, x, y, r, t) {
+    const body = c.createRadialGradient(x, y, r * 0.55, x, y, r);
+    body.addColorStop(0, 'rgba(255,255,255,0.03)');
+    body.addColorStop(0.75, 'rgba(170,220,255,0.16)');
+    body.addColorStop(1, 'rgba(90,170,240,0.42)');
+    c.fillStyle = body;
+    c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill();
+    if (c.createConicGradient) {
+      const film = c.createConicGradient(t * 0.8, x, y);
+      ['rgba(255,120,200,.55)', 'rgba(255,220,120,.5)', 'rgba(120,255,200,.45)', 'rgba(110,170,255,.55)', 'rgba(200,120,255,.5)', 'rgba(255,120,200,.55)']
+        .forEach((col, i, a) => film.addColorStop(i / (a.length - 1), col));
+      c.strokeStyle = film;
+      c.lineWidth = Math.max(1.5, r * 0.09);
+      c.beginPath(); c.arc(x, y, r - c.lineWidth / 2, 0, Math.PI * 2); c.stroke();
+    }
+    c.save();
+    c.translate(x - r * 0.38, y - r * 0.42);
+    c.rotate(-0.7);
+    c.fillStyle = 'rgba(255,255,255,.85)';
+    c.beginPath(); c.ellipse(0, 0, r * 0.26, r * 0.12, 0, 0, Math.PI * 2); c.fill();
+    c.restore();
+    c.fillStyle = 'rgba(255,255,255,.55)';
+    c.beginPath(); c.arc(x + r * 0.45, y + r * 0.5, r * 0.07, 0, Math.PI * 2); c.fill();
+  }
+
   function drawBubble(c, b, now) {
     const intro = Math.min(1, b.age / 0.35);
     const outro = Math.max(0, Math.min(1, (b.life - b.age) / 0.5));
@@ -168,6 +194,11 @@
       c.font = `700 ${Math.round(r * 0.7)}px Inter, sans-serif`;
       c.textAlign = 'center'; c.textBaseline = 'middle';
       c.fillText('!', b.x, y + 1);
+    } else if (b.type === 'normal') {
+      soapBubble(c, b.x, y, r, now / 1000 + b.seed);
+      c.strokeStyle = 'rgba(42,157,244,.35)';
+      c.lineWidth = 2;
+      c.beginPath(); c.arc(b.x, y, r + 5, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (1 - b.age / b.life)); c.stroke();
     } else {
       const gold = b.type === 'gold';
       const gr = c.createRadialGradient(b.x - r * 0.35, y - r * 0.35, r * 0.1, b.x, y, r);
@@ -240,6 +271,8 @@
     onFrame: (dt) => tick(dt),
     onDraw: draw,
   });
+
+  if (window.Pendu3D) window.Pendu3D.enhance(stage);
 
   $('#goBtn').addEventListener('click', start);
 
